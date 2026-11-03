@@ -1,28 +1,14 @@
 # Open FPGA platform for battery-free UHF RFID sensing
 
-> **Status: planning.** The source code will be published here once the project starts.
-
 ## About
 
-This project turns a low-cost, low-power FPGA (Lattice MachXO2-4000ZE) into an open, battery-free EPC Gen2 UHF RFID sensor tag. The FPGA implements the complete tag in hardware (PIE decoding, CRC, Gen2 command handling, FM0/Miller backscatter encoding, tag memory) next to a small RISC-V microcontroller (SERV) that reads sensors over SPI/I2C. Firmware is loaded over the air through standard Gen2 Write commands to User memory, so any commercial reader can reprogram the tag and read its data.
+This project turns a low-power FPGA (Lattice MachXO2-4000ZE) into a battery-free EPC Gen2 UHF RFID sensor tag. The FPGA runs the tag protocol in hardware, next to a small RISC-V microcontroller (SERV) that talks to sensors. Both layers are open: you can program the microcontroller like any other, and you can also change the tag hardware itself, for example the protocol logic or an added encryption core.
 
-Existing platforms either fix the protocol in closed silicon or implement it as firmware on a commercial microcontroller. Here, both layers are open: users can change the sensing application and also the tag's protocol logic itself.
+The digital design (EPC Gen2 tag + RISC-V) comes from a tag SoC developed during a PhD at the University of Navarra, and it already works on FPGA with a commercial reader. The work here is to turn it into a platform others can use, step by step:
 
-## Planned deliverables (first version)
+1. **Survive power loss.** Store the tag data in the FPGA's internal flash and restore it at power-up. The goal is to make it work first; optimisation comes later.
+2. **Run from RF power.** Connect the FPGA to an existing open analog front-end (based on the WISP 5 front-end) on a first carrier board, so a commercial reader can power and read it at close range.
+3. **Improve.** Develop a better front-end, reduce power, and add sensor examples.
+4. **Release.** Publish the RTL, PCB, firmware and reader tools with documentation.
 
-- FPGA design of the EPC Gen2 tag and RISC-V subsystem
-- Firmware SDK with example sensor applications
-- Carrier board with a simple RF front-end and energy harvester
-- Power measurements and documentation
-
-Later work will improve the analog front-end and the integration.
-
-## Planned licenses
-
-- Hardware (PCB): CERN-OHL-S-2.0
-- RTL: Solderpad Hardware License 2.1
-- Firmware and software: Apache-2.0
-
-## Author
-
-Karim Chaffai, University of Navarra
+The source code will be published here as the project progresses.
